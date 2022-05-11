@@ -75,4 +75,21 @@ async function deleteEmployee(empid) {
 };
 
 
-module.exports = {getEmployees, insertEmployee, updateEmployee, deleteEmployee};
+async function getEmployeeCustomers(empid) {
+
+    return new Promise((resolve, reject)=>{
+
+
+        let query = "select customers.* from customers LEFT JOIN customeremployee on customers.customer_id=customeremployee.customer_id left join employees on customeremployee.employee_id=employees.employee_id where employees.employee_id=" + empid ;   
+        pool.query(query,  (error, elements)=>{
+            if(error){
+                return reject(error);
+            }
+            return resolve(elements);
+        });
+
+    });
+};
+
+
+module.exports = {getEmployees, insertEmployee, updateEmployee, deleteEmployee, getEmployeeCustomers};

@@ -74,5 +74,21 @@ async function deleteCustomer(id) {
     });
 };
 
+async function getCustomerEmployee(id) {
 
-module.exports = {getCustomer, insertCustomer, updateCustomer, deleteCustomer};
+    return new Promise((resolve, reject)=>{
+
+
+        let query = "select employees.* from customers LEFT JOIN customeremployee on customers.customer_id=customeremployee.customer_id left join employees on customeremployee.employee_id=employees.employee_id where customers.customer_id=" + id ;   
+        pool.query(query,  (error, elements)=>{
+            if(error){
+                return reject(error);
+            }
+            console.log("elements---", elements);
+            return resolve(elements);
+        });
+
+    });
+};
+
+module.exports = {getCustomer, insertCustomer, updateCustomer, deleteCustomer, getCustomerEmployee};

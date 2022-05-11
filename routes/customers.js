@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var mysql = require('mysql');
-var {getCustomer, insertCustomer, updateCustomer, deleteCustomer} = require('../database/CustomerDB')
+var {getCustomer, insertCustomer, updateCustomer, deleteCustomer, getCustomerEmployee} = require('../database/CustomerDB')
 
 const CustomerRouter = express.Router();
 
@@ -62,6 +62,19 @@ CustomerRouter.route('/:custid')
 .delete((req,res,next) => {
 
     deleteCustomer(req.params.custid)
+    .then((result) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        console.log("rows in get:",result)
+        res.json(result);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+
+CustomerRouter.route('/:id/employees')
+.get((req,res,next) => {
+
+    getCustomerEmployee(parseInt(req.params.id))
     .then((result) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
